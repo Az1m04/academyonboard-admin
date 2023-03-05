@@ -1,0 +1,58 @@
+.tagStyling {
+  margin: 0;
+}
+.selectStyling {
+  :global(.ant-select-arrow) {
+    color: #fef2f2;
+  }
+}
+.selectBackground {
+  :global(.ant-select-selector) {
+    color: #f9f0f0;
+  }
+}
+.mainStyling {
+  :global(.ant-select-selector) {
+    background-color: #48760b !important;
+    border: none !important;
+  }
+}
+:global {
+  tr.ant-table-expanded-row > td,
+  tr.ant-table-expanded-row:hover > td {
+    background: white;
+  }
+}
+
+.tableRowUpdateStyling {
+  background-color: #fffbeb;
+}
+
+.tableStyling {
+  :global(.ant-table-row) {
+    height: 5px;
+    box-shadow: 0 1px 6px 0 #d8d5d5;
+  }
+}
+
+.buttonStyling {
+  :global(.ant-btn-primary[disabled]) {
+    background: #ffa50080;
+  }
+}
+
+.searchInputRadius {
+  :global {
+    .ant-input {
+      border-radius: 8px;
+    }
+    .ant-input-search
+      > .ant-input-group
+      > .ant-input-group-addon:last-child
+      .ant-input-search-button {
+      border-radius: 0 8px 8px 0;
+    }
+  }
+}
+
+// #ffa50080

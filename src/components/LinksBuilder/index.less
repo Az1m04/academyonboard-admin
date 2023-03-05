@@ -1,0 +1,19 @@
+.LinkDisplayWrapper {
+  min-width: 400px;
+  max-width: 400px;
+  .LinkRecord {
+    .LinkActions {
+      display: none;
+      transform: translateX(100%);
+      transition: transform ease-out 0.3s;
+    }
+
+    &:hover {
+      .LinkActions {
+        display: flex;
+        width: auto;
+        transform: translateX(0);
+      }
+    }
+  }
+}

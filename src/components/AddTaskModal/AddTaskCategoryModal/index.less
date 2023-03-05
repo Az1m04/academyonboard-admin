@@ -1,0 +1,32 @@
+@import '~@/styles/theme/foundation/colors.less';
+
+.formLabel {
+  margin-bottom: -0.25rem;
+  color: #718096;
+  font-weight: 500;
+  font-size: 0.75rem;
+}
+.AddSourcePageModal {
+  :global {
+    .ant-modal-body {
+      padding: 12px 24px !important;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+  }
+  .ModalTitle {
+    color: @mmo-primary-color;
+    font-weight: 600;
+    font-size: 1.25rem;
+  }
+  .ModalDescription {
+    padding-bottom: 0.5rem;
+    color: @mmo-primary-color;
+    font-weight: 600;
+  }
+  .IconAvatar {
+    padding: 0.5rem;
+    background-color: #e2e8f0 !important;
+    cursor: pointer !important;
+  }
+}

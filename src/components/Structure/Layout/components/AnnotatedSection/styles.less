@@ -1,0 +1,27 @@
+@import '~@/styles/theme/commons.less';
+
+.AnnotatedSection {
+  .mt-4();
+  .pt-4();
+
+  + .AnnotatedSection {
+    .border-t();
+  }
+
+  width: 100%;
+
+  .AnnotationDescription {
+    color: @app-color-text-secondary;
+    font-weight: 400;
+    font-size: 0.875rem;
+    .pt-4();
+    .text-sm();
+  }
+  .AnnotationContent {
+    flex: 2 2 48rem;
+    min-width: 0;
+    max-width: calc(100% - 2rem);
+    margin-top: 1.6rem;
+    margin-left: 2rem;
+  }
+}

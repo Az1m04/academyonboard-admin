@@ -1,0 +1,30 @@
+@import '~@/styles/theme/commons.less';
+
+.Card {
+  .rounded-lg();
+  .shadow();
+  .bg-white();
+
+  + .Card {
+    .mt-3();
+  }
+}
+
+.Section {
+  .px-4();
+  .text-sm();
+  + .Section {
+    .border-t();
+
+    @media print {
+      .border-0();
+    }
+  }
+
+  &:first-child {
+    .rounded-t-lg();
+  }
+  &:last-child {
+    .rounded-b-lg();
+  }
+}

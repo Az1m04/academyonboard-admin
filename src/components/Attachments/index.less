@@ -1,0 +1,23 @@
+.ActionButtons {
+  position: absolute;
+  top: 50%;
+  left: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.Image {
+  position: relative;
+
+  &:hover {
+    .ActionButtons {
+      visibility: visible;
+    }
+
+    opacity: 0.8;
+  }
+}

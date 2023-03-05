@@ -1,0 +1,61 @@
+.EmptyState {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+  max-width: 99.8rem;
+  margin: 2rem auto 0 auto;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+
+  .Section {
+    position: relative !important;
+    left: 2rem;
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    width: 100% !important;
+
+    .DetailsContainer {
+      flex: 1 1 auto !important;
+      flex-basis: 50%;
+
+      .Details {
+        .TextContainer {
+          .Text {
+            overflow: hidden !important;
+            color: #2f855a;
+            font-weight: 600;
+            font-size: 1.5rem;
+            white-space: nowrap !important;
+            white-space: nowrap !important;
+            text-overflow: ellipsis !important;
+          }
+          .Content {
+            color: #a0aec0;
+            font-size: 1.125rem;
+          }
+        }
+        .Actions {
+          margin-top: 1.5rem;
+        }
+        .FooterContent {
+          margin-top: 1.5rem;
+        }
+      }
+    }
+
+    .ImageContainer {
+      flex: 1 1 auto !important;
+      flex-basis: 50%;
+      img {
+        position: relative;
+        z-index: 0;
+        width: 170%;
+        margin-top: 0;
+        margin-left: -70%;
+      }
+    }
+  }
+}

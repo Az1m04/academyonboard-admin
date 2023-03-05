@@ -1,0 +1,859 @@
+import React, { useEffect, useState } from 'react';
+import Icon, {
+  ApartmentOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  UserSwitchOutlined,
+} from '@ant-design/icons';
+import { Badge, Button, Dropdown, Tabs, Tooltip } from 'antd';
+import { useParams, history, Link } from 'umi';
+import {
+  EnvelopeAction,
+  EnvelopeFillIcon,
+  TelephoneFillIcon,
+  TextIconAction,
+  WhatsAppAction,
+} from '@/utils/AppIcons.js';
+import { CardHeading, PersonFill } from 'react-bootstrap-icons';
+import { connect } from 'umi';
+import EnquiryTable from './EnquiryTable/index.jsx';
+import LeadActions from '@/components/LeadsData/LeadActions/index.jsx';
+import GetShortTimeString from '@/components/GetShortTimeString/index.js';
+
+const { TabPane } = Tabs;
+
+const LeadEnquiry = ({
+  dispatch,
+  leadData,
+  loading,
+  deleteEnquiriesLoading,
+  enquiryStats,
+  editLead,
+}) => {
+  const { tabName } = useParams();
+  const [startIndex, setStartIndex] = useState(0);
+  const [keyword, setKeyword] = useState('');
+  const [viewSize, setViewSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [visibleWhatsApp, setVisibleWhatsApp] = useState(false);
+  const [visibleEmail, setVisibleEmail] = useState(false);
+  const [recordDetails, setRecordDetails] = useState([]);
+  const [isNoteVisible, setIsNoteVisible] = useState(false);
+  const [isPhoneVisible, setIsPhoneVisible] = useState(false);
+  const [isAssigneeVisible, setIsAssigneeVisible] = useState(false);
+  const [hideDropDown, setHideDropDown] = useState({});
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [expendedBackground, setExpendedBackground] = useState([]);
+  const searchLeadBy = () => {
+    switch (tabName) {
+      case 'all':
+        return '';
+      case 'online':
+        return 'ONLINE';
+      case 'office-visits':
+        return 'OFFICE_VISIT';
+      case 'branch-reference':
+        return 'BRANCH_REF';
+      case 'social-media':
+        return 'SOCIAL_MEDIA';
+      case 'referred':
+        return 'REFERRED';
+      case 'printed-media':
+        return 'PRINTED_MEDIA';
+      case 're-inquired':
+        return 'PARTY_RE_INQUIRED';
+      case 'closed':
+        return 'LEAD_CLOSED';
+      case 'registered':
+        return 'PARTY_REGISTERED';
+      case 'visas':
+        return 'VISA';
+      case 'courses':
+        return 'COURSES';
+      case 'others':
+        return 'OTHERS';
+      default:
+        return '';
+    }
+  };
+  const getEnquiry = (search) => {
+    dispatch({
+      type: 'leads/getStudentEnquiries',
+      payload: {
+        query: {
+          viewSize,
+          startIndex,
+          leadTypeId: 'LEAD_STUDENT',
+          keyword: search,
+          searchBy: searchLeadBy(),
+        },
+      },
+    });
+  };
+  const getEnquiryStatsData = () => {
+    dispatch({
+      type: 'leads/getEnquiryStats',
+      payload: {},
+    });
+  };
+  useEffect(() => {
+    getEnquiryStatsData();
+  }, []);
+  useEffect(() => {
+    if (!editLead?.visible) getEnquiry();
+  }, [viewSize, keyword, startIndex, tabName, editLead]);
+  const onTabChange = () => {
+    setKeyword('');
+    setStartIndex(0);
+    setCurrentPage(1);
+  };
+  const menu = (key) => {
+    return (
+      <LeadActions
+        record={key}
+        hideDropDown={hideDropDown}
+        type="student"
+        setHideDropDown={setHideDropDown}
+        partyId={key?.id}
+        enquiryId={key?.enquiryId}
+        getEnquiry={getEnquiry}
+        keyword={keyword}
+      />
+    );
+  };
+  const tabs = [
+    {
+      key: 'all',
+      title: (
+        <Badge
+          count={enquiryStats?.all}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">All</p>
+        </Badge>
+      ),
+      style: 'ml-6 pr-2',
+    },
+    {
+      key: 'online',
+      title: (
+        <Badge
+          count={enquiryStats?.online}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Online</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'office-visits',
+      title: (
+        <Badge
+          count={enquiryStats?.officeVisit}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Office visits</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'branch-reference',
+      title: (
+        <Badge
+          count={enquiryStats?.branchRef}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-2 m-0">Branch reference</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'social-media',
+      title: (
+        <Badge
+          count={enquiryStats?.socialMedia}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Social media</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'referred',
+      title: (
+        <Badge
+          count={enquiryStats?.referred}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Referred</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'printed-media',
+      title: (
+        <Badge
+          count={enquiryStats?.printedMedia}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Printed media</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 're-inquired',
+      title: (
+        <Badge
+          count={enquiryStats?.reInquired}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Re-inquired</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'closed',
+      title: (
+        <Badge
+          count={enquiryStats?.closed}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Closed</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'registered',
+      title: (
+        <Badge
+          count={enquiryStats?.registered}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Registered</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'courses',
+      title: (
+        <Badge
+          count={enquiryStats?.courses}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Courses</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'visas',
+      title: (
+        <Badge
+          count={enquiryStats?.visa}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Visas</p>
+        </Badge>
+      ),
+      style: 'px-2',
+    },
+    {
+      key: 'others',
+      title: (
+        <Badge
+          count={enquiryStats?.other}
+          size="small"
+          style={{
+            fontSize: '10px',
+            marginTop: '3px',
+            backgroundColor: '#f59e0b',
+            padding: '0px 4px 0px 4px',
+            boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
+            width: '28px',
+          }}
+        >
+          <p className="pt-2.5 pr-3 m-0">Others</p>
+        </Badge>
+      ),
+      style: 'mr-2 px-2',
+    },
+  ];
+  const columns = [
+    {
+      title: 'Enquiry .no.',
+      dataIndex: 'enquiryId',
+      align: 'center',
+      width: 90,
+      render: (text) => <span className="font-medium text-indigo-500">{text}</span>,
+    },
+    {
+      title: <div className="capitalize ml-2">name </div>,
+      dataIndex: 'displayName',
+      key: 'displayName',
+      align: 'start',
+      width: 200,
+      sorter: (a, b) => a.displayName.length - b.displayName.length,
+      sortDirections: ['ascend', 'descend'],
+
+      render: (renderData, record) => (
+        <div className="w-max ml-2">
+          <div className="font-medium capitalize truncate flex pb-0">
+            <p className="mb-0 mt-0.5 mr-0.5 text-yellow-500">
+              <PersonFill />
+            </p>
+            <Tooltip
+              title={<span className="capitalize">{record?.displayName}</span>}
+              getPopupContainer={(node) => node.parentNode}
+            >
+              <p
+                onClick={(e) => {
+                  e.stopPropagation();
+                  history.push(`/leads/students/enquiries/${record?.id}/profile/${'enquiry'}`);
+                }}
+                className="mb-0 mx-2 w-40 cursor-pointer"
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {record?.displayName}
+              </p>
+            </Tooltip>
+            <span
+              className="bg-yellow-500 rounded text-white h-4 px-1 pb-0.5 mt-0.5 shadow-md"
+              style={{ fontSize: '0.70rem' }}
+            >
+              {GetShortTimeString({ time: record?.createdAt })}
+            </span>
+          </div>
+
+          <div className="space-y-1 mt-1">
+            <div className="font-normal lowercase flex">
+              <p className="mb-0 mt-1 mr-1 text-yellow-500">
+                <EnvelopeFillIcon />
+              </p>
+              <p className="mb-0 mx-2"> {record?.primaryEmail?.toLowerCase()}</p>
+            </div>
+            <div className="flex">
+              <p className="mb-0 mt-1 mr-1 text-yellow-500">
+                <TelephoneFillIcon />
+              </p>
+              <p className="mb-0 mx-2">{record?.formattedPhone?.replace(/\s+/g, '')}</p>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+
+    {
+      title: <div className="capitalize">Services</div>,
+      dataIndex: 'need',
+      key: 'newNeeds',
+      width: 130,
+      render: (text) => <div className="  capitalize">{text?.description || 'N/A'}</div>,
+    },
+    {
+      title: <div className="capitalize">Purposes</div>,
+      dataIndex: 'need',
+      key: 'purposesName',
+      width: 250,
+      render: (data) => (
+        <div className="  capitalize">
+          {data?.subNeeds?.description
+            ? data?.subNeeds?.description
+            : data?.subNeeds?.name || 'N/A'}
+        </div>
+      ),
+    },
+    {
+      title: 'Interest Level',
+      align: 'center',
+      dataIndex: 'interestLevel',
+      width: 120,
+      render: (data) => (
+        <div className="font-normal bg-green-500 rounded-full Capitalize mx-2 text-white shadow-lg">
+          {data}
+        </div>
+      ),
+    },
+    {
+      title: <div className="capitalize">status</div>,
+      dataIndex: 'status',
+      key: 'status',
+      align: 'start',
+      width: 250,
+      render: (renderData, record) => (
+        <>
+          <div className="flex">
+            <Tooltip
+              title="Last status"
+              placement="top"
+              getPopupContainer={(node) => node.parentNode}
+            >
+              <span className="px-1 font-semibold">ES</span>
+            </Tooltip>
+            <p
+              className={`px-1 m-0 font-normal Capitalize ${
+                renderData === 'Inactive' && 'text-red-500'
+              }`}
+              style={{ whiteSpace: 'nowrap' }}
+            >
+              {renderData}
+            </p>
+          </div>
+
+          <div className="flex mt-1">
+            <Tooltip
+              title="Current status"
+              placement="top"
+              getPopupContainer={(node) => node.parentNode}
+            >
+              <span className="px-1 font-semibold">CS</span>
+            </Tooltip>
+            <Tooltip
+              title={record?.leadStatusType}
+              placement="top"
+              getPopupContainer={(node) => node.parentNode}
+            >
+              <div
+                className="px-1 m-0 font-normal w-48 Capitalize"
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {record?.leadStatusType}
+              </div>
+            </Tooltip>
+          </div>
+
+          <div className="flex mt-1">
+            <Tooltip
+              title="Follow up status"
+              placement="top"
+              getPopupContainer={(node) => node.parentNode}
+            >
+              <span className="px-1 font-semibold">FS</span>
+            </Tooltip>
+            <Tooltip
+              title={record?.lastFollowUpStatus}
+              placement="top"
+              getPopupContainer={(node) => node.parentNode}
+            >
+              <div
+                className="px-1 m-0 font-normal w-48 Capitalize"
+                style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {record?.lastFollowUpBy?.isInterested !== undefined
+                  ? (record?.lastFollowUpBy?.isInterested === true && record?.lastFollowUpStatus) ||
+                    (record?.lastFollowUpBy?.isInterested === false && 'Lead is not interested!')
+                  : '--'}
+              </div>
+            </Tooltip>
+          </div>
+        </>
+      ),
+    },
+    {
+      title: 'Stats',
+      dataIndex: '',
+      align: 'start',
+      width: 200,
+      render: (__, record) => (
+        <div className="flex space-x-4 items-center cursor-pointer p-0">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              const payload = {
+                visible: true,
+                type: 'ADD_NOTE',
+                title: 'Add note',
+                subTitle: 'Add note',
+                leadId: record.id,
+                enquiryId: record?.enquiryId,
+                rec: null,
+                purposeFor: 'students',
+                record,
+              };
+
+              dispatch({
+                type: 'leads/setStates',
+                payload,
+                key: 'editLead',
+              });
+            }}
+          >
+            <Badge
+              size="small"
+              title="Notes"
+              count={record?.totalNotes}
+              offset={[2, 20]}
+              style={{ backgroundColor: '#111827' }}
+            >
+              <Tooltip title="Notes" placement="top" getPopupContainer={(node) => node.parentNode}>
+                <Icon
+                  style={{
+                    color: '#F9FAFB',
+                    fontSize: '1.1rem',
+                    backgroundColor: '#4B5563',
+                    borderRadius: '0.6rem',
+                    padding: '0.15rem',
+                  }}
+                  component={CardHeading}
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <Badge
+              size="small"
+              title="Visits"
+              count={record?.totalVisits}
+              offset={[2, 20]}
+              style={{ backgroundColor: '#DC2626' }}
+            >
+              <Tooltip title="Visits" placement="top" getPopupContainer={(node) => node.parentNode}>
+                <UserSwitchOutlined
+                  style={{
+                    color: '#F9FAFB',
+                    fontSize: '1.1rem',
+                    backgroundColor: '#4B5563',
+                    borderRadius: '0.6rem',
+                    padding: '0.15rem',
+                  }}
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              const payload = {
+                visible: true,
+                type: 'ACTIVITY_TIMELINE',
+                title: 'Activity timeline',
+                subTitle: 'Activity timeline',
+                leadId: record.id,
+                enquiryId: record?.enquiryId,
+                rec: null,
+                purposeFor: 'students',
+                record,
+              };
+              dispatch({
+                type: 'leads/setStates',
+                payload,
+                key: 'editLead',
+              });
+            }}
+          >
+            <Badge
+              size="small"
+              count={record?.totalActivities}
+              title="Activities "
+              offset={[2, 20]}
+              style={{ backgroundColor: '#52c41a' }}
+            >
+              <Tooltip
+                title="Activities "
+                placement="top"
+                getPopupContainer={(node) => node.parentNode}
+              >
+                <ApartmentOutlined
+                  style={{
+                    color: '#F9FAFB',
+                    fontSize: '1.1rem',
+                    backgroundColor: '#4B5563',
+                    borderRadius: '0.6rem',
+                    padding: '0.15rem',
+                  }}
+                />
+              </Tooltip>
+            </Badge>
+          </div>
+        </div>
+      ),
+    },
+    {
+      title: 'Actions',
+      align: 'start',
+      width: 100,
+      render: (_, record) => (
+        <div className="flex space-x-3 items-center">
+          <Tooltip
+            title="Send whatsapp message"
+            placement="top"
+            getPopupContainer={(node) => node.parentNode}
+          >
+            <div
+              className={`cursor-pointer icon`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setVisibleWhatsApp(true);
+                setRecordDetails([record]);
+              }}
+            >
+              <WhatsAppAction />
+            </div>
+          </Tooltip>
+
+          <Tooltip
+            title="Send email message"
+            placement="top"
+            getPopupContainer={(node) => node.parentNode}
+          >
+            <div
+              className="cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setVisibleEmail(true);
+                setRecordDetails([record]);
+              }}
+            >
+              <EnvelopeAction />
+            </div>
+          </Tooltip>
+
+          <Tooltip
+            title="Send text message"
+            placement="top"
+            getPopupContainer={(node) => node.parentNode}
+          >
+            <div
+              className="cursor-pointer"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPhoneVisible(true);
+                setRecordDetails([record]);
+              }}
+            >
+              <TextIconAction />
+            </div>
+          </Tooltip>
+        </div>
+      ),
+    },
+    {
+      width: 60,
+      render: (_, record) => (
+        <div>
+          <Dropdown
+            getPopupContainer={leadData?.totalCount > 5 ? (node) => node.parentNode : null}
+            overlay={menu(record)}
+            trigger={['click']}
+            placement={'bottomRight'}
+            visible={hideDropDown[record.enquiryId]}
+            onVisibleChange={(value) =>
+              setHideDropDown({
+                [record.enquiryId]: value,
+              })
+            }
+          >
+            <MoreOutlined
+              onClick={(e) => {
+                e.stopPropagation();
+                setHideDropDown({
+                  [record.id]: true,
+                });
+              }}
+              className="text-lg cursor-pointer hover:text-yellow-600 "
+            />
+          </Dropdown>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <div className="bg-white my-16">
+      <Tabs
+        defaultActiveKey={tabName}
+        className={`w-full `}
+        onChange={onTabChange}
+        onTabClick={(e) => history.push(`/leads/students/enquiries/${e?.toLowerCase()}`)}
+        activeKey={tabName}
+      >
+        {tabs.map(({ key, title }) => (
+          <TabPane key={key} tab={<span className="mx-2.5">{title}</span>}>
+            {key === tabName && (
+              <EnquiryTable
+                leadLoading={{ loading, deleteEnquiriesLoading }}
+                leadData={leadData}
+                leadType="student"
+                purpose="lead"
+                keyword={keyword}
+                setKeyword={setKeyword}
+                viewSize={viewSize}
+                setViewSize={setViewSize}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                startIndex={startIndex}
+                setStartIndex={setStartIndex}
+                columns={columns}
+                visibleWhatsApp={visibleWhatsApp}
+                setVisibleWhatsApp={setVisibleWhatsApp}
+                visibleEmail={visibleEmail}
+                setVisibleEmail={setVisibleEmail}
+                recordDetails={recordDetails}
+                setRecordDetails={setRecordDetails}
+                isNoteVisible={isNoteVisible}
+                setIsNoteVisible={setIsNoteVisible}
+                isPhoneVisible={isPhoneVisible}
+                setIsPhoneVisible={setIsPhoneVisible}
+                isAssigneeVisible={isAssigneeVisible}
+                setIsAssigneeVisible={setIsAssigneeVisible}
+                hideDropDown={hideDropDown}
+                setHideDropDown={setHideDropDown}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+                selectedRowKeys={selectedRowKeys}
+                setSelectedRowKeys={setSelectedRowKeys}
+                expendedBackground={expendedBackground}
+                setExpendedBackground={setExpendedBackground}
+                getEnquiry={getEnquiry}
+              />
+            )}
+          </TabPane>
+        ))}
+      </Tabs>
+      <Link to="/leads/students/new">
+        <Button
+          style={{
+            backgroundColor: 'rgb(27, 86, 143)',
+            position: 'absolute',
+            bottom: '2rem',
+            right: '2rem',
+            border: 'none',
+            height: '60px',
+            width: '60px',
+          }}
+          shape="circle"
+          icon={<PlusOutlined style={{ fontSize: '2rem', color: '#fff' }} />}
+        />
+      </Link>
+    </div>
+  );
+};
+
+export default connect(({ leads, loading }) => ({
+  editLead: leads?.editLead,
+  enquiryStats: leads?.enquiryStats?.enquiryStats,
+  leadData: leads?.studentEnquiriesList,
+  loading: loading?.effects['leads/getStudentEnquiries'],
+  deleteEnquiriesLoading: loading?.effects['leads/removeLeadEnquiry'],
+}))(LeadEnquiry);

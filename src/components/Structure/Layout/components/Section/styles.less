@@ -1,0 +1,33 @@
+@import '~@/styles/theme/commons.less';
+
+.AnnotatedSection {
+  .pt-4();
+  .border-t();
+
+  .AnnotationWrapper {
+    margin-top: -1.6rem;
+    margin-left: -2rem;
+    .flex();
+
+    .Annotation {
+      flex: 1 1 24rem;
+      min-width: 0;
+      max-width: calc(100% - 2rem);
+      margin-top: 1.6rem;
+      margin-left: 2rem;
+      padding: 2rem 2rem 2rem 0;
+
+      .AnnotationDescription {
+        .mt-6();
+      }
+
+      .AnnotationContent {
+        flex: 2 2 48rem;
+        min-width: 0;
+        max-width: calc(100% - 2rem);
+        margin-top: 1.6rem;
+        margin-left: 2rem;
+      }
+    }
+  }
+}

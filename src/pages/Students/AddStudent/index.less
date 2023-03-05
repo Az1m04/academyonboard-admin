@@ -1,0 +1,106 @@
+.stepsMarginWrapperClass {
+  :global(.ant-steps-small.ant-steps-horizontal:not(.ant-steps-label-vertical) .ant-steps-item) {
+    display: flex;
+    margin: 0px 12px !important;
+  }
+}
+
+.wrapperForOverridingUpload {
+  :global {
+    .ant-upload.ant-upload-select {
+      display: block;
+    }
+  }
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+
+  width: 60px;
+
+  height: 36px;
+  padding-left: 4px;
+  font-weight: 600;
+  font-size: small;
+  background: white;
+}
+
+.arrow1 {
+  width: 0px;
+  height: 0px;
+}
+
+.arrow2 {
+  width: 0px;
+  height: 0px;
+}
+
+.arrowRed {
+  background: #ca0000;
+}
+
+.arrow1Red {
+  border-top: 18px solid #ca0000;
+  border-bottom: 18px solid #ca0000;
+  border-left: 18px solid transparent;
+}
+
+.arrow2Red {
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 18px solid #ca0000;
+}
+
+.con {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.dot {
+  position: static;
+}
+
+.greenArrow {
+  display: flex;
+  align-items: center;
+
+  width: 60px;
+  height: 36px;
+  font-weight: 600;
+  font-size: small;
+  background: white;
+  background: green;
+}
+
+.greenArrow1 {
+  width: 0px;
+  height: 0px;
+  border-top: 18px solid green;
+  border-bottom: 18px solid green;
+  border-left: 18px solid transparent;
+}
+
+.greenArrow2 {
+  width: 0px;
+  height: 0px;
+  border-top: 18px solid transparent;
+  border-bottom: 18px solid transparent;
+  border-left: 18px solid green;
+}
+
+.uploadStyleOverrideWrapper {
+  :global {
+    .ant-upload.ant-upload-select {
+      display: block;
+    }
+  }
+}
+
+.selectStyling {
+  :global(.ant-select-arrow .ant-select-arrow-icon) {
+    display: block;
+    margin-right: 6px;
+  }
+}

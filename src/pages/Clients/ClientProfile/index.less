@@ -1,0 +1,174 @@
+.SummaryOnMap {
+  .Link {
+    flex: 0 1 auto;
+    height: 0;
+    overflow: hidden;
+    font-size: 12px;
+    opacity: 0;
+    transition: all 0.3s ease-out;
+  }
+
+  &:hover {
+    .Link {
+      height: 36px;
+      opacity: 1;
+    }
+  }
+}
+
+:global {
+  .ant-typography-edit {
+    visibility: hidden;
+  }
+
+  .ant-typography {
+    margin-bottom: 0 !important;
+  }
+  .ant-layout.ant-layout-has-sider > .ant-layout,
+  .ant-layout.ant-layout-has-sider > .ant-layout-content {
+    overflow-x: visible;
+  }
+}
+
+.textOverflow {
+  width: 200px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.textOverflowRevenue {
+  width: 100px !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.Width {
+  width: 220px !important;
+}
+
+.LeadName:hover {
+  :global {
+    .ant-typography-edit {
+      visibility: visible;
+    }
+  }
+}
+.LeadDesignation {
+  display: flex !important;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.LeadDesignation:hover {
+  :global {
+    .ant-typography-edit {
+      visibility: visible;
+    }
+  }
+}
+
+.LeadStatusWrapper {
+  &:hover {
+    .StatusEditButton {
+      visibility: visible;
+    }
+  }
+}
+
+.StatusEditButton {
+  visibility: hidden;
+}
+
+.LeadCompany {
+  background-color: #fff !important;
+}
+
+.LeadCompany {
+  &:hover {
+    .LeadCompanyEditButton {
+      visibility: visible;
+    }
+  }
+}
+
+.LeadCompanyEditButton {
+  visibility: hidden;
+}
+.LeadCompanyLocation {
+  &:hover {
+    .LeadCompanyLocationEditButton {
+      visibility: visible;
+    }
+  }
+}
+
+.LeadCompanyLocationEditButton {
+  visibility: hidden;
+}
+
+.LeadCompanyPhone {
+  &:hover {
+    .LeadCompanyPhoneEditButton {
+      visibility: visible;
+    }
+  }
+}
+
+.LeadCompanyPhoneEditButton {
+  visibility: hidden;
+}
+
+.LeadTimezoneWrapper {
+  &:hover {
+    .LeadTimezoneEditButton {
+      visibility: visible;
+    }
+  }
+}
+
+.LeadTimezoneEditButton {
+  visibility: hidden;
+}
+
+.AnnualRevenueWrapper {
+  &:hover {
+    .AnnualRevenueEditButton {
+      visibility: visible;
+    }
+  }
+}
+
+.AnnualRevenueEditButton {
+  visibility: hidden;
+}
+
+.hoverVisible {
+  opacity: 0;
+}
+
+.hoverVisible:hover {
+  opacity: 1;
+}
+
+.inputBottomMargin {
+  margin-bottom: 12px;
+}
+
+.inputRightAlign {
+  text-align: right;
+}
+
+.currency_right {
+  :global(.ant-input-number-handler-wrap) {
+    display: none;
+  }
+}
+
+.LeadCompanyEmail {
+  &:hover {
+    .LeadCompanyEmailEditButton {
+      visibility: visible;
+    }
+  }
+}
+.LeadCompanyEmailEditButton {
+  visibility: hidden;
+}

@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "master": "academy-on-board"
+  },
+  "targets": {
+    "academy-on-board": {
+      "hosting": {
+        "live": [
+          "academy-on-board"
+        ],
+        "test": [
+          "academy-on-board-test"
+        ]
+      }
+    }
+  }
+}
